@@ -9,7 +9,7 @@ Apache Solr为世界上许多最大的互联网站点提供搜索和导航功能
 
 	1.CVE-2019-0193
 	2.CVE-2019-0192
-	3.Apache Solr Velocity模版注入远程命令执行
+	3.CVE-2019-17558
 	4.CVE-2017-12629
 	5.CVE-2019-12409
 
@@ -288,7 +288,7 @@ java -cp ysoserial.jar ysoserial.exploit.JRMPListener 1234 Jdk7u21 "cmd"
 
 https://github.com/mpgn/CVE-2019-0192/blob/master/CVE-2019-0192.py
 
-## Apache Solr Velocity模版注入远程命令执行
+## CVE-2019-17558
 
 ### 影响版本
 
