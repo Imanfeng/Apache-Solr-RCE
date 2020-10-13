@@ -7,12 +7,17 @@ Apache Solr为世界上许多最大的互联网站点提供搜索和导航功能
 
 ### List
 
-	1.CVE-2019-0193
-	2.CVE-2019-0192
-	3.CVE-2019-17558
-	4.CVE-2017-12629
-	5.CVE-2019-12409
-	6.CVE-2020-13957
+[CVE-2019-0193](https://github.com/Imanfeng/Apache-Solr-RCE#cve-2019-0193)
+
+[CVE-2019-0192](https://github.com/Imanfeng/Apache-Solr-RCE#cve-2019-0192)
+
+[CVE-2019-17558](https://github.com/Imanfeng/Apache-Solr-RCE#cve-2019-17558)
+
+[CVE-2017-12629](https://github.com/Imanfeng/Apache-Solr-RCE#cve-2017-12629)
+
+[CVE-2019-12409](https://github.com/Imanfeng/Apache-Solr-RCE#cve-2019-12409)
+
+[CVE-2020-13957](https://github.com/Imanfeng/Apache-Solr-RCE#cve-2020-13957)
 
 ## CVE-2019-0193
 Apache Solr DataImportHandler RCE
